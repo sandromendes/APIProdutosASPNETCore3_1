@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace ControleProdutosWEBAPI.Model
 {
-    public class Produto
+    public class Categoria
     {
         [Key]
-        public int Produto_id { get; set; }
+        public int Categoria_Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public int Quantidade { get; set; }
-        public Decimal Preco { get; set; }
+        public List<Produto> Produtos { get; set; }
     }
 }

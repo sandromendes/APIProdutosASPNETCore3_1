@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ControleProdutosWEBAPI.Service;
+using ControleProdutosWEBAPI.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace ControleProdutosWEBAPI
 {
@@ -27,7 +22,27 @@ namespace ControleProdutosWEBAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IProdutoService, ProdutoService>();
+            services.AddSingleton<IProdutoRepository, ProdutoRepository>();
+
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
+            services.AddSwaggerGen(c => {
+
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Controle de Produtos",
+                        Version = "v1",
+                        Description = "API REST criada com o ASP.NET Core 3.1 para controle de produtos",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Sandro Mendes",
+                            Url = new Uri("https://github.com/sandromendes")
+                        }
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +52,11 @@ namespace ControleProdutosWEBAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Controle de Produtos V1");
+            });
 
             app.UseHttpsRedirection();
 
