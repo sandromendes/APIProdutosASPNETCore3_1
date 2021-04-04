@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Command\" />
+    <Folder Include="Domain\Exception\" />
   </ItemGroup>
 
 

@@ -17,8 +17,6 @@
  */
 
 using ControleProdutosWEBAPI.Context;
-using ControleProdutosWEBAPI.Domain.Handler;
-using ControleProdutosWEBAPI.Domain.Query;
 using ControleProdutosWEBAPI.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -38,7 +36,7 @@ namespace ControleProdutosWEBAPI.Repository
         }
         public bool GetProdutos(out List<Produto> listagem)
         {
-            listagem = _context.Produto.ToList<Produto>();
+            listagem = _context.Produto.ToList();
 
             if (listagem.Any())
                 return true;
@@ -76,17 +74,6 @@ namespace ControleProdutosWEBAPI.Repository
             return false;
         }
 
-        public bool GetProdutoReport(out IList<FindProdutoReportResponse> response,
-            FindProdutoReportRequest request)
-        {
-            response = new FindProdutoReportHandler(request).Handle();
-
-            if (response.Any())
-                return true;
-
-            return false;
-        }
-
         public bool AddProduto(Produto produto)
         {
             try
@@ -95,7 +82,7 @@ namespace ControleProdutosWEBAPI.Repository
                 _context.SaveChanges();
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -106,7 +93,7 @@ namespace ControleProdutosWEBAPI.Repository
             try
             {
                 Produto produtoBase = _context.Produto.Single(p => p.Produto_id == id);
-                _context.Attach<Produto>(produtoBase);
+                _context.Attach(produtoBase);
 
                 produtoBase.Nome = produto.Nome;
                 produtoBase.Descricao = produto.Descricao;
@@ -139,6 +126,5 @@ namespace ControleProdutosWEBAPI.Repository
                 return false;
             }
         }
-
     }
 }

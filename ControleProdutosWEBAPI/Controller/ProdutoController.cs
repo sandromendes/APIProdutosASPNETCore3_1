@@ -16,7 +16,10 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
+using System;
 using System.Collections.Generic;
+using ControleProdutosWEBAPI.Domain.Command;
+using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Domain.Query;
 using ControleProdutosWEBAPI.Model;
 using ControleProdutosWEBAPI.Repository;
@@ -75,22 +78,28 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<FindProdutoReportResponse>> GetProdutoReportId(
-            [FromBody] FindProdutoReportRequest request)
+            [FromServices] IFindProdutoReportHandler handler, [FromQuery] FindProdutoReportRequest request)
         {
-            if (!_repository.GetProdutoReport(out var listagem, request))
-                return NotFound();
+            var response = handler.Handle(request);
 
-            return Ok(listagem);
+            return Ok(response);
         }
 
         [HttpPost]
         [ProducesResponseType(201)]
-        public ActionResult<Produto> AddProduto(Produto produto)
+        public ActionResult<Produto> AddProduto(
+            [FromServices] ICreateProdutoHandler handler, [FromQuery] CreateProdutoRequest command)
         {
-            if (!_repository.AddProduto(produto))
-                return BadRequest();
+            try
+            {
+                var response = handler.Handle(command);
             
-            return Ok(produto);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPut("{id}")]

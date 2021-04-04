@@ -16,7 +16,8 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
-using System;
+using ControleProdutosWEBAPI.Domain.Handler;
+using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,25 +41,21 @@ namespace ControleProdutosWEBAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
             services.AddSingleton<IProdutoRepository, ProdutoRepository>();
+            services.AddTransient<ICreateProdutoHandler, CreateProdutoHandler>();
+            services.AddTransient<IFindProdutoReportHandler, FindProdutoReportHandler>();
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            
-            services.AddSwaggerGen(c => {
 
+            services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
                         Title = "Controle de Produtos",
                         Version = "v1",
-                        Description = "API REST criada com o ASP.NET Core 3.1 para controle de produtos",
-                        Contact = new OpenApiContact
-                        {
-                            Name = "Sandro Mendes",
-                            Url = new Uri("https://github.com/sandromendes")
-                        }
                     });
             });
         }

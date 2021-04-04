@@ -17,29 +17,23 @@
  */
 
 using ControleProdutosWEBAPI.Context;
+using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Domain.Query;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ControleProdutosWEBAPI.Domain.Handler
 {
-    public class FindProdutoReportHandler
+    public class FindProdutoReportHandler : IFindProdutoReportHandler
     {
-        public ApplicationDbContext _context;
-        private readonly FindProdutoReportRequest _request;
-
-        public FindProdutoReportHandler(FindProdutoReportRequest request)
+        public IList<FindProdutoReportResponse> Handle(FindProdutoReportRequest request)
         {
-            _context = new ApplicationDbContext();
-            _request = request;
-        }
+            var context = new ApplicationDbContext();
 
-        public IList<FindProdutoReportResponse> Handle()
-        {
-            var report = (from p in _context.Produto
-                          join c in _context.Categoria
+            var report = (from p in context.Produto
+                          join c in context.Categoria
                           on p.CategoriaFK equals c.Categoria_Id
-                          where (c.Categoria_Id == _request.CategoriaId)
+                          where (c.Categoria_Id == request.CategoriaId)
                           select new FindProdutoReportResponse
                           {
                               ProdutoID = p.Produto_id,

@@ -16,19 +16,18 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
-using ControleProdutosWEBAPI.Domain.Query;
-using ControleProdutosWEBAPI.Model;
-using System.Collections.Generic;
+using System;
 
-namespace ControleProdutosWEBAPI.Repository
+namespace ControleProdutosWEBAPI.Domain.Command
 {
-    public interface IProdutoRepository
+    public class CreateProdutoRequest
     {
-        public bool GetProdutos(out List<Produto> listagem);
-        public bool GetProduto(int id, out Produto produto);
-        public bool GetProdutoByCategoriaId(int id, out List<Produto> listagem);
-        public bool AddProduto(Produto produto);
-        public bool UpdateProduto(int id, Produto produto);
-        public bool DeleteProduto(int id);
+        public int ProdutoID { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public int Quantidade { get; set; }
+        public Decimal Preco { get; set; }
+
+        public int CategoriaFK { get; set; }
     }
 }
