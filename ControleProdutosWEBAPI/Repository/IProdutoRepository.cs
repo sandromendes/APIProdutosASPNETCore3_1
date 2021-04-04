@@ -26,8 +26,8 @@ namespace ControleProdutosWEBAPI.Repository
         public bool GetProdutos(out List<Produto> listagem);
         public bool GetProduto(int id, out Produto produto);
         public bool GetProdutoByCategoriaId(int id, out List<Produto> listagem);
-        public bool AddProduto(Produto produto);
-        public bool UpdateProduto(int id, Produto produto);
-        public bool DeleteProduto(int id);
+        public void AddProduto(Produto produto);
+        public void UpdateProduto(int id, Produto produto);
+        public void DeleteProduto(int id);
     }
 }

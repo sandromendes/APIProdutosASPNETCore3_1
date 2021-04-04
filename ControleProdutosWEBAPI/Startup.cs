@@ -16,6 +16,7 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
+using ControleProdutosWEBAPI.Context;
 using ControleProdutosWEBAPI.Domain.Handler;
 using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Repository;
@@ -43,6 +44,7 @@ namespace ControleProdutosWEBAPI
             services.AddControllers();
             
             services.AddSingleton<IProdutoRepository, ProdutoRepository>();
+            services.AddTransient<ApplicationDbContext>();
             services.AddTransient<ICreateProdutoHandler, CreateProdutoHandler>();
             services.AddTransient<IFindProdutoReportHandler, FindProdutoReportHandler>();
 

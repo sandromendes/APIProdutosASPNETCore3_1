@@ -46,10 +46,17 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<Produto>> GetProdutos() 
         {
-            if (!_repository.GetProdutos(out var listagem))
-                return NotFound();
+            try
+            {
+                if (!_repository.GetProdutos(out var listagem))
+                    return NotFound();
 
-            return Ok(listagem);
+                return Ok(listagem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -57,10 +64,17 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(404)]
         public ActionResult<Produto> GetProduto(int id)
         {
-            if (!_repository.GetProduto(id, out var produto))
-                return NotFound();
+            try
+            {
+                if (!_repository.GetProduto(id, out var produto))
+                    return NotFound();
 
-            return Ok(produto);
+                return Ok(produto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("category/{id}")]
@@ -68,10 +82,17 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(404)]
         public ActionResult<Produto> GetProdutosByCategoriaId(int id)
         {
-            if(!_repository.GetProdutoByCategoriaId(id, out var listagem))
-                return NotFound();
+            try
+            {
+                if(!_repository.GetProdutoByCategoriaId(id, out var listagem))
+                    return NotFound();
         
-            return Ok(listagem);
+                return Ok(listagem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("report")]
@@ -80,15 +101,21 @@ namespace ControleProdutosWEBAPI.Controller
         public ActionResult<IEnumerable<FindProdutoReportResponse>> GetProdutoReportId(
             [FromServices] IFindProdutoReportHandler handler, [FromQuery] FindProdutoReportRequest request)
         {
-            var response = handler.Handle(request);
+            try
+            {
+                var response = handler.Handle(request);
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
         [ProducesResponseType(201)]
-        public ActionResult<Produto> AddProduto(
-            [FromServices] ICreateProdutoHandler handler, [FromQuery] CreateProdutoRequest command)
+        public ActionResult<Produto> AddProduto([FromServices] ICreateProdutoHandler handler, [FromQuery] CreateProdutoRequest command)
         {
             try
             {
@@ -107,21 +134,29 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(404)]
         public ActionResult<Produto> UpdateProduto(int id, Produto produto)
         {
-            if(_repository.UpdateProduto(id, produto))
+            try
             {
+                _repository.UpdateProduto(id, produto);
                 return Ok(produto);
             }
-
-            return BadRequest();
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public ActionResult<string> DeleteProduto(int id)
         {
-            if (_repository.DeleteProduto(id))
+            try
+            {
+                _repository.DeleteProduto(id);
                 return Ok("Produto deletado com sucesso.");
-
-            return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

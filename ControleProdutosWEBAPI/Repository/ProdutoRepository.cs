@@ -74,21 +74,20 @@ namespace ControleProdutosWEBAPI.Repository
             return false;
         }
 
-        public bool AddProduto(Produto produto)
+        public void AddProduto(Produto produto)
         {
             try
             {
                 _context.Produto.Add(produto);
                 _context.SaveChanges();
-                return true;
             }
             catch (Exception e)
             {
-                return false;
+                throw e;
             }
         }
 
-        public bool UpdateProduto(int id, Produto produto)
+        public void UpdateProduto(int id, Produto produto)
         {
             try
             {
@@ -103,27 +102,28 @@ namespace ControleProdutosWEBAPI.Repository
                 _context.SaveChanges();
 
                 produto.Produto_id = produtoBase.Produto_id;
-
-                return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                throw e;
             }
         }
 
-        public bool DeleteProduto(int id)
+        public void DeleteProduto(int id)
         {
-            Produto produtoBase = _context.Produto.Single(p => p.Produto_id == id);
+            try
+            {
+                Produto produtoBase = _context.Produto.Single(p => p.Produto_id == id);
 
-            if (produtoBase != null)
+                if (produtoBase != null)
+                {
+                    _context.Produto.Remove(produtoBase);
+                    _context.SaveChanges();
+                } 
+            }
+            catch (Exception e)
             {
-                _context.Produto.Remove(produtoBase);
-                _context.SaveChanges();
-                return true;
-            } else
-            {
-                return false;
+                throw e;
             }
         }
     }

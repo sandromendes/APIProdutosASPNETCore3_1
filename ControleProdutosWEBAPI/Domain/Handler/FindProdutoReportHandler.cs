@@ -26,12 +26,17 @@ namespace ControleProdutosWEBAPI.Domain.Handler
 {
     public class FindProdutoReportHandler : IFindProdutoReportHandler
     {
+        private readonly ApplicationDbContext _context;
+
+        public FindProdutoReportHandler(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IList<FindProdutoReportResponse> Handle(FindProdutoReportRequest request)
         {
-            var context = new ApplicationDbContext();
-
-            var report = (from p in context.Produto
-                          join c in context.Categoria
+            var report = (from p in _context.Produto
+                          join c in _context.Categoria
                           on p.CategoriaFK equals c.Categoria_Id
                           where (c.Categoria_Id == request.CategoriaId)
                           select new FindProdutoReportResponse

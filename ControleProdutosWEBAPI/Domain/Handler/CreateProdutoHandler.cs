@@ -21,13 +21,12 @@ using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Model;
 using ControleProdutosWEBAPI.Repository;
 using System;
-using System.Collections.Generic;
 
 namespace ControleProdutosWEBAPI.Domain.Handler
 {
     public class CreateProdutoHandler : ICreateProdutoHandler
     {
-        private IProdutoRepository _repository;
+        private readonly IProdutoRepository _repository;
 
         public CreateProdutoHandler(IProdutoRepository repository)
         {
@@ -36,16 +35,18 @@ namespace ControleProdutosWEBAPI.Domain.Handler
 
         public CreateProdutoResponse Handle(CreateProdutoRequest command)
         {
-            var produto = new Produto { 
-                CategoriaFK = command.CategoriaFK,
-                Descricao = command.Descricao,
-                Nome = command.Nome,
-                Preco = command.Preco,
-                Quantidade = command.Quantidade
-            };
-
-            if (_repository.AddProduto(produto))
+            try
             {
+                var produto = new Produto { 
+                    CategoriaFK = command.CategoriaFK,
+                    Descricao = command.Descricao,
+                    Nome = command.Nome,
+                    Preco = command.Preco,
+                    Quantidade = command.Quantidade
+                };
+
+                _repository.AddProduto(produto);
+            
                 return new CreateProdutoResponse { 
                     ProdutoID = produto.Produto_id,
                     Categoria = produto.Categoria,
@@ -55,7 +56,7 @@ namespace ControleProdutosWEBAPI.Domain.Handler
                     Quantidade = produto.Quantidade
                 };
             }
-            else
+            catch (Exception)
             {
                 throw new Exception("Erro ao cadastrar o produto. Consulte o LOG para detalhes.");
             }
