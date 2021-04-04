@@ -16,7 +16,6 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
-using ControleProdutosWEBAPI.Domain.Query;
 using ControleProdutosWEBAPI.Model;
 using System.Collections.Generic;
 
