@@ -17,15 +17,15 @@
  */
 
 using ControleProdutosWEBAPI.Context;
-using ControleProdutosWEBAPI.Domain.Handler;
-using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace ControleProdutosWEBAPI
 {
@@ -45,8 +45,7 @@ namespace ControleProdutosWEBAPI
             
             services.AddSingleton<IProdutoRepository, ProdutoRepository>();
             services.AddTransient<ApplicationDbContext>();
-            services.AddTransient<ICreateProdutoHandler, CreateProdutoHandler>();
-            services.AddTransient<IFindProdutoReportHandler, FindProdutoReportHandler>();
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>

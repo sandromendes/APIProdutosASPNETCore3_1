@@ -17,10 +17,16 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace ControleProdutosWEBAPI.Domain.Query
 {
     public class FindProdutoReportResponse
+    {
+        public IList<ProdutoReportData> Response { get; set; }
+    }
+
+    public class ProdutoReportData
     {
         public int ProdutoID { get; set; }
         public String NomeCategoria { get; set; }

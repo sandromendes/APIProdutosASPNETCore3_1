@@ -19,10 +19,10 @@
 using System;
 using System.Collections.Generic;
 using ControleProdutosWEBAPI.Domain.Command;
-using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Domain.Query;
 using ControleProdutosWEBAPI.Model;
 using ControleProdutosWEBAPI.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -48,9 +48,13 @@ namespace ControleProdutosWEBAPI.Controller
         {
             try
             {
-                if (!_repository.GetProdutos(out var listagem))
-                    return NotFound();
+                var listagem = _repository.GetProdutos();
 
+                if (listagem == null)
+                {
+                    return NotFound();
+                }
+                
                 return Ok(listagem);
             }
             catch (Exception e)
@@ -66,7 +70,9 @@ namespace ControleProdutosWEBAPI.Controller
         {
             try
             {
-                if (!_repository.GetProduto(id, out var produto))
+                var produto = _repository.GetProduto(id);
+                
+                if(produto == null)
                     return NotFound();
 
                 return Ok(produto);
@@ -84,9 +90,13 @@ namespace ControleProdutosWEBAPI.Controller
         {
             try
             {
-                if(!_repository.GetProdutoByCategoriaId(id, out var listagem))
+                var listagem = _repository.GetProdutoByCategoriaId(id);
+
+                if (listagem == null)
+                {
                     return NotFound();
-        
+                }
+                
                 return Ok(listagem);
             }
             catch (Exception e)
@@ -99,13 +109,13 @@ namespace ControleProdutosWEBAPI.Controller
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public ActionResult<IEnumerable<FindProdutoReportResponse>> GetProdutoReportId(
-            [FromServices] IFindProdutoReportHandler handler, [FromQuery] FindProdutoReportRequest request)
+            [FromServices] IMediator mediator, [FromQuery] FindProdutoReportRequest request)
         {
             try
             {
-                var response = handler.Handle(request);
+                var response = mediator.Send(request);
 
-                return Ok(response);
+                return Ok(response.Result);
             }
             catch (Exception e)
             {
@@ -115,13 +125,13 @@ namespace ControleProdutosWEBAPI.Controller
 
         [HttpPost]
         [ProducesResponseType(201)]
-        public ActionResult<Produto> AddProduto([FromServices] ICreateProdutoHandler handler, [FromQuery] CreateProdutoRequest command)
+        public ActionResult<Produto> AddProduto([FromServices] IMediator mediator, [FromQuery] CreateProdutoRequest command)
         {
             try
             {
-                var response = handler.Handle(command);
+                var response = mediator.Send(command);
             
-                return Ok(response);
+                return Ok(response.Result);
             }
             catch (Exception e)
             {

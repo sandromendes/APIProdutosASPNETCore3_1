@@ -16,13 +16,9 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
-using ControleProdutosWEBAPI.Domain.Query;
-using System.Collections.Generic;
-
-namespace ControleProdutosWEBAPI.Domain.Handler.Interfaces
+namespace ControleProdutosWEBAPI.Business.UseCases
 {
-    public interface IFindProdutoReportHandler
+    public class AplicarDescontoInteractor
     {
-        IList<FindProdutoReportResponse> Handle(FindProdutoReportRequest request);
     }
 }

@@ -17,14 +17,16 @@
  */
 
 using ControleProdutosWEBAPI.Context;
-using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Domain.Query;
+using MediatR;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ControleProdutosWEBAPI.Domain.Handler
 {
-    public class FindProdutoReportHandler : IFindProdutoReportHandler
+    public class FindProdutoReportHandler : IRequestHandler<FindProdutoReportRequest, FindProdutoReportResponse>
     {
         private readonly ApplicationDbContext _context;
 
@@ -33,13 +35,14 @@ namespace ControleProdutosWEBAPI.Domain.Handler
             _context = context;
         }
 
-        public IList<FindProdutoReportResponse> Handle(FindProdutoReportRequest request)
+        public Task<FindProdutoReportResponse> Handle(FindProdutoReportRequest request, CancellationToken cancellationToken)
+
         {
             var report = (from p in _context.Produto
                           join c in _context.Categoria
                           on p.CategoriaFK equals c.Categoria_Id
                           where (c.Categoria_Id == request.CategoriaId)
-                          select new FindProdutoReportResponse
+                          select new ProdutoReportData
                           {
                               ProdutoID = p.Produto_id,
                               NomeCategoria = c.Nome,
@@ -48,8 +51,7 @@ namespace ControleProdutosWEBAPI.Domain.Handler
                               Valor = p.Preco
                           }).ToList();
 
-
-            return report;
+            return Task.FromResult(new FindProdutoReportResponse { Response = report });
         }
     }
 }

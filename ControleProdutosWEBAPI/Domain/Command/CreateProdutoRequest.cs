@@ -16,18 +16,18 @@
  * If not, see http://www.gnu.org/licenses/.
  */
 
+using MediatR;
 using System;
 
 namespace ControleProdutosWEBAPI.Domain.Command
 {
-    public class CreateProdutoRequest
+    public class CreateProdutoRequest : IRequest<CreateProdutoResponse>
     {
         public int ProdutoID { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public int Quantidade { get; set; }
         public Decimal Preco { get; set; }
-
         public int CategoriaFK { get; set; }
     }
 }

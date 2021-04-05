@@ -19,7 +19,6 @@
 using ControleProdutosWEBAPI.Context;
 using ControleProdutosWEBAPI.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,44 +33,45 @@ namespace ControleProdutosWEBAPI.Repository
         {
             _context = new ApplicationDbContext();
         }
-        public bool GetProdutos(out List<Produto> listagem)
-        {
-            listagem = _context.Produto.ToList();
-
-            if (listagem.Any())
-                return true;
-
-            return false;
-        }
-
-        public bool GetProduto(int id, out Produto produto)
+        public IList<Produto> GetProdutos()
         {
             try
             {
-                produto = _context.Produto
-                    .Where(p => p.Produto_id == id)
-                    .Include(p => p.Categoria)
-                    .Single();
-
-                return true;
+                return _context.Produto.ToList();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                produto = new Produto();
-                return false;
+                throw e;
             }
         }
 
-        public bool GetProdutoByCategoriaId(int id, out List<Produto> listagem)
+        public Produto GetProduto(int id)
         {
-            listagem = _context.Produto
-                .Where(p => p.CategoriaFK == id)
-                .ToList();
+            try
+            {
+                return _context.Produto
+                    .Where(p => p.Produto_id == id)
+                    .Include(p => p.Categoria)
+                    .Single();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
-            if(listagem.Any())
-                return true;
-
-            return false;
+        public IList<Produto> GetProdutoByCategoriaId(int id)
+        {
+            try
+            {
+                return _context.Produto
+                    .Where(p => p.CategoriaFK == id)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public void AddProduto(Produto produto)

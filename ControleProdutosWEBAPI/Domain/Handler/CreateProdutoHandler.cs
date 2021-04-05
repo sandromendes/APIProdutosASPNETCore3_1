@@ -17,14 +17,16 @@
  */
 
 using ControleProdutosWEBAPI.Domain.Command;
-using ControleProdutosWEBAPI.Domain.Handler.Interfaces;
 using ControleProdutosWEBAPI.Model;
 using ControleProdutosWEBAPI.Repository;
+using MediatR;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ControleProdutosWEBAPI.Domain.Handler
 {
-    public class CreateProdutoHandler : ICreateProdutoHandler
+    public class CreateProdutoHandler : IRequestHandler<CreateProdutoRequest, CreateProdutoResponse>
     {
         private readonly IProdutoRepository _repository;
 
@@ -33,21 +35,21 @@ namespace ControleProdutosWEBAPI.Domain.Handler
             _repository = repository;
         }
 
-        public CreateProdutoResponse Handle(CreateProdutoRequest command)
+        public Task<CreateProdutoResponse> Handle(CreateProdutoRequest request, CancellationToken cancellationToken)
         {
             try
             {
                 var produto = new Produto { 
-                    CategoriaFK = command.CategoriaFK,
-                    Descricao = command.Descricao,
-                    Nome = command.Nome,
-                    Preco = command.Preco,
-                    Quantidade = command.Quantidade
+                    CategoriaFK = request.CategoriaFK,
+                    Descricao = request.Descricao,
+                    Nome = request.Nome,
+                    Preco = request.Preco,
+                    Quantidade = request.Quantidade
                 };
 
                 _repository.AddProduto(produto);
             
-                return new CreateProdutoResponse { 
+                var response = new CreateProdutoResponse { 
                     ProdutoID = produto.Produto_id,
                     Categoria = produto.Categoria,
                     Nome = produto.Nome,
@@ -55,6 +57,8 @@ namespace ControleProdutosWEBAPI.Domain.Handler
                     Preco = produto.Preco,
                     Quantidade = produto.Quantidade
                 };
+
+                return Task.FromResult(response);
             }
             catch (Exception)
             {
