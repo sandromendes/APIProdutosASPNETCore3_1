@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2021 Sandro Mendes
  * 
  * This file is part of ControleEstoqueBackEnd.
@@ -7,7 +7,7 @@
  * of the GNU General Public License as published by the Free Software Foundation, 
  * either version 3 of the License, or (at your option) any later version.
  * 
- * ControleEstoqueBackEnd is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * ControleEstoqueBackEnd is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
  * 
  * See the GNU General Public License for more details.
@@ -17,6 +17,10 @@
  */
 
 using ControleProdutosWEBAPI.Context;
+using ControleProdutosWEBAPI.Infra.Repository;
+using ControleProdutosWEBAPI.Infra.Repository.Interface;
+using ControleProdutosWEBAPI.Infra.UnitOfWork;
+using ControleProdutosWEBAPI.Infra.UnitOfWork.Interface;
 using ControleProdutosWEBAPI.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -43,8 +47,12 @@ namespace ControleProdutosWEBAPI
         {
             services.AddControllers();
             
-            services.AddSingleton<IProdutoRepository, ProdutoRepository>();
-            services.AddTransient<ApplicationDbContext>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ApplicationContext>();
+
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllersWithViews()
