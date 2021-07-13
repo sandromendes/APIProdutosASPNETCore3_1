@@ -31,6 +31,5 @@ namespace ControleProdutosWEBAPI.Domain.Command.Products
 
     public class UpdateProductResponse : ResponseBase
     {
-
     }
 }

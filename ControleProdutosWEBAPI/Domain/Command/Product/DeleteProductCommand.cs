@@ -29,6 +29,5 @@ namespace ControleProdutosWEBAPI.Domain.Command.Products
 
     public class DeleteProductResponse : ResponseBase
     {
-
     }
 }

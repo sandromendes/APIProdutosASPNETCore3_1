@@ -18,6 +18,7 @@
 
 using MediatR;
 using ProductControlAPI.Domain.Common;
+using ProductControlAPI.Domain.DTO;
 
 namespace ProductControlAPI.Domain.Command.Category
 {
@@ -28,5 +29,6 @@ namespace ProductControlAPI.Domain.Command.Category
 
     public class CreateCategoryReponse : ResponseBase
     {
+        public CategoryDTO Response { get; set; }
     }
 }

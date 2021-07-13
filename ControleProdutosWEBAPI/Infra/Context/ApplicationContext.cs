@@ -28,7 +28,7 @@ namespace ControleProdutosWEBAPI.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DBJUKEBOX");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DBProduct");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

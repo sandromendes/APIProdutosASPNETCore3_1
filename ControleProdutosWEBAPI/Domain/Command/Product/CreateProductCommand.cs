@@ -34,6 +34,6 @@ namespace ControleProdutosWEBAPI.Domain.Command.Products
 
     public class CreatedProductResponse : ResponseBase
     {
-        public ProductDTO DTO { get; set; }
+        public ProductDTO Response { get; set; }
     }
 }

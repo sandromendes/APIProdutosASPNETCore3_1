@@ -27,7 +27,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ControleProdutosWEBAPI.Business.Handler
+namespace ControleProdutosWEBAPI.Business.Handler.Command
 {
     public class ProductCommandHandler : 
         IRequestHandler<CreateProductCommand, CreatedProductResponse>,
@@ -71,7 +71,7 @@ namespace ControleProdutosWEBAPI.Business.Handler
 
                 var response = new CreatedProductResponse
                 {
-                    DTO = dto,
+                    Response = dto,
                     Status = ResponseStatus.SUCCESS
                 };
 

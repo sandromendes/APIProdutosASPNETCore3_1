@@ -38,7 +38,7 @@ namespace ProductControlAPI.Controller
         }
 
         [HttpGet("/category")]
-        public ActionResult<string> FindAllCategory(int page, int size)
+        public ActionResult<FindAllCategoryResponse> FindAllCategory(int page, int size)
         {
             try
             {
@@ -56,9 +56,21 @@ namespace ProductControlAPI.Controller
         }
 
         [HttpGet("/category")]
-        public ActionResult<string> FindCategory([FromQuery] string request)
+        public ActionResult<string> FindCategory([FromQuery] int categoryId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = new FindCategoryQuery { Id = categoryId};
+
+                var response = _mediator.Send(query);
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation(e.Message);
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("/category")]

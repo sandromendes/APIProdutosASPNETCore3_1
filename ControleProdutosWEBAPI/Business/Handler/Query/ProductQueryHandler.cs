@@ -29,7 +29,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ControleProdutosWEBAPI.Business.Handler
+namespace ControleProdutosWEBAPI.Business.Handler.Query
 {
     public class ProductQueryHandler : 
         IRequestHandler<FindProductQuery, FindProductResponse>,

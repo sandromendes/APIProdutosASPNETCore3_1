@@ -23,7 +23,7 @@ using ProductControlAPI.Domain.Command.Category;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProductControlAPI.Business.Handler
+namespace ProductControlAPI.Business.Handler.Command
 {
     public class CategoryCommandHandler :
         IRequestHandler<CreateCategoryCommand, CreateCategoryReponse>,
