@@ -20,6 +20,7 @@ using ControleProdutosWEBAPI.Context;
 using ControleProdutosWEBAPI.Domain.DTO;
 using ControleProdutosWEBAPI.Domain.Enum;
 using ControleProdutosWEBAPI.Domain.Query.Product;
+using ControleProdutosWEBAPI.Model;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ProductControlAPI.Domain.Common;
@@ -36,10 +37,10 @@ namespace ControleProdutosWEBAPI.Business.Handler.Query
         IRequestHandler<FindAllProductsQuery, FindAllProductsResponse>,
         IRequestHandler<FindProductByCategoryQuery, FindProductByCategoryResponse>
     {
-        private readonly ApplicationContext _context;
+        private readonly ReadContext _context;
         private readonly ILogger<ProductQueryHandler> _logger;
 
-        public ProductQueryHandler(ApplicationContext context, ILogger<ProductQueryHandler> logger)
+        public ProductQueryHandler(ReadContext context, ILogger<ProductQueryHandler> logger)
         {
             _context = context;
             _logger = logger;
@@ -50,7 +51,8 @@ namespace ControleProdutosWEBAPI.Business.Handler.Query
         {
             try
             {
-                var report = _context.Product
+                var data = _context
+                            .Set<Product>()
                             .Where(p => p.Id == request.ProductId)
                             .Select(p => new ProductDTO
                             {
@@ -62,7 +64,7 @@ namespace ControleProdutosWEBAPI.Business.Handler.Query
                                 Category = p.Category
                             }).FirstOrDefault();
 
-                return Task.FromResult(new FindProductResponse { Response = report, Status = ResponseStatus.SUCCESS });
+                return Task.FromResult(new FindProductResponse { Response = data, Status = ResponseStatus.SUCCESS });
             }
             catch (Exception e)
             {
@@ -75,17 +77,18 @@ namespace ControleProdutosWEBAPI.Business.Handler.Query
         {
             try
             {
-                var products = _context.Product
-                    .Select(a => new ProductDTO 
-                    { 
-                        ProductID = a.Id,
-                        Category = a.Category,
-                        Name = a.Name,
-                        Description = a.Description,
-                        Price = a.Price,
-                        Quantity = a.Quantity
-                    })
-                    .AsQueryable();
+                var products = _context
+                            .Set<Product>()
+                            .Select(a => new ProductDTO 
+                            { 
+                                ProductID = a.Id,
+                                Category = a.Category,
+                                Name = a.Name,
+                                Description = a.Description,
+                                Price = a.Price,
+                                Quantity = a.Quantity
+                            })
+                            .AsQueryable();
 
                 var response = PagedList<ProductDTO>.ToPagedList(products, request.CurrentPage, request.PageSize);
 
@@ -102,17 +105,18 @@ namespace ControleProdutosWEBAPI.Business.Handler.Query
         {
             try
             {
-                var products = _context.Product
-                    .Select(a => new ProductDTO
-                    {
-                        ProductID = a.Id,
-                        Category = a.Category,
-                        Name = a.Name,
-                        Description = a.Description,
-                        Price = a.Price,
-                        Quantity = a.Quantity
-                    })
-                    .AsQueryable();
+                var products = _context
+                            .Set<Product>()
+                            .Select(a => new ProductDTO
+                            {
+                                ProductID = a.Id,
+                                Category = a.Category,
+                                Name = a.Name,
+                                Description = a.Description,
+                                Price = a.Price,
+                                Quantity = a.Quantity
+                            })
+                            .AsQueryable();
 
                 var response = PagedList<ProductDTO>.ToPagedList(products, request.CurrentPage, request.PageSize);
 

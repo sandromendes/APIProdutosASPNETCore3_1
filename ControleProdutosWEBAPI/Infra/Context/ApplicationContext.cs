@@ -18,6 +18,7 @@
 
 using ControleProdutosWEBAPI.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ControleProdutosWEBAPI.Context
 {
@@ -31,12 +32,27 @@ namespace ControleProdutosWEBAPI.Context
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DBProduct");
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Entity<Product>()
+            modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(b => b.Products)
                 .HasForeignKey(p => p.CategoryFK);
+        }
+    }
+
+    public class ReadContext
+    {
+        private readonly ApplicationContext _dbContext;
+
+        public ReadContext(ApplicationContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public IQueryable<TEntity> Set<TEntity>() where TEntity : class
+        {
+            return _dbContext.Set<TEntity>().AsNoTracking();
         }
     }
 }

@@ -23,5 +23,6 @@ namespace ProductControlAPI.Domain.Common
     public class ResponseBase
     {
         public ResponseStatus Status { get; set; }
+        public int StatusCode { get; set; }
     }
 }

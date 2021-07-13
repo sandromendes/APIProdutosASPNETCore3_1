@@ -19,12 +19,13 @@
 using MediatR;
 using ProductControlAPI.Domain.Common;
 using ProductControlAPI.Domain.DTO;
+using System;
 
 namespace ProductControlAPI.Domain.Query.Category
 {
     public class FindCategoryQuery : IRequest<FindCategoryReponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class FindCategoryReponse : ResponseBase
